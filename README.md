@@ -39,4 +39,6 @@ git add .
 git commit -m "Initial setup: Node project, Cypress installed, base folder structure"
 git push origin main
 
+7. Follow up the first ticket: https://github.com/crisemy/cypress-framework-the-internet/issues/1
 
+8. Follow up the rest of the tickets...
