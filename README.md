@@ -21,7 +21,7 @@ https://github.com/crisemy/cypress-framework-the-internet.git
 4. Generating the structure of the framework
 cypress/
 ├── e2e/
-│   └── home.cy.js         # Frist test
+│   └── home.cy.js         # First test
 ├── fixtures/
 ├── pages/                 # Page Objects
 │   └── LoginPage.js
@@ -29,8 +29,14 @@ cypress/
 │   ├── commands.js
 │   └── e2e.js
 
-5. Adding the .gitignore file containing the following
+5. Adding the .gitignore file containing the following:
 node_modules
 .cypress
 .DS_Store
+
+6.  Made the commit: 
+git add .
+git commit -m "Initial setup: Node project, Cypress installed, base folder structure"
+git push origin main
+
 
