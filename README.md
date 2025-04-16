@@ -1,4 +1,5 @@
-# Use a site to test against.
+# My own Cypress Framework
+## Use a site to test against.
 1. Download the following repo:
 https://github.com/saucelabs/the-internet.git
 2. Follow up the instructions contained in that repo in order to get a localhost to test against.
@@ -9,3 +10,7 @@ b. docker run -d -p 7080:5000 gprestes/the-internet
 c. run the app and voala! http://localhost:7080
 
 More information in here -> https://hub.docker.com/r/gprestes/the-internet/
+
+https://github.com/crisemy/cypress-framework-the-internet.git
+
+## Test
