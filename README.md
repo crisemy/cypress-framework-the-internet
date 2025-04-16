@@ -13,4 +13,24 @@ More information in here -> https://hub.docker.com/r/gprestes/the-internet/
 
 https://github.com/crisemy/cypress-framework-the-internet.git
 
-## Test
+## Installing cypress plus dependencies
+1. npm init -y -> Will generate a package.json file to start doing your configuration
+2. Installing cypress: npm install cypress --save-dev
+3. npx cypress open -> To generate the environment
+
+4. Generating the structure of the framework
+cypress/
+├── e2e/
+│   └── home.cy.js         # Frist test
+├── fixtures/
+├── pages/                 # Page Objects
+│   └── LoginPage.js
+├── support/
+│   ├── commands.js
+│   └── e2e.js
+
+5. Adding the .gitignore file containing the following
+node_modules
+.cypress
+.DS_Store
+

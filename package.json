@@ -1,0 +1,15 @@
+{
+  "name": "cypress-framework-the-internet",
+  "version": "1.0.0",
+  "description": "1. Download the following repo:\r https://github.com/saucelabs/the-internet.git\r 2. Follow up the instructions contained in that repo in order to get a localhost to test against.\r 3. If you wouldn't want to download it (in my case the documentation is not clear and didn't want to work with rackup),\r get the docker image: \r a. docker pull gprestes/the-internet\r b. docker run -d -p 7080:5000 gprestes/the-internet\r c. run the app and voala! http://localhost:7080",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^14.3.0"
+  }
+}
