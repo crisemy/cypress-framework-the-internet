@@ -1,11 +1,20 @@
 class HomePage {
+    constructor() {
+      this.heading = 'h1.heading';
+      this.examplesTitle = 'h2'; 
+    }
+  
     visit() {
-        cy.visit('/')
+      cy.visit('/');
     }
-
-    verifyWelcomeText () {
-        cy.contains('Welcome to the-internet').should('be.visible')
+  
+    getHeading() {
+      return cy.get(this.heading);
     }
-}
-
- export default HomePage
+  
+    getExamplesTitle() {
+      return cy.get(this.examplesTitle);
+    }
+  }
+  
+  export default HomePage;

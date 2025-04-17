@@ -1,11 +1,17 @@
-// Just gaining access to the Home Page
 import HomePage from '../pages/HomePage';
 
 const homePage = new HomePage();
 
 describe('Home Page', () => {
-  it('should load successfully and display the welcome text', () => {
+  beforeEach(() => {
     homePage.visit();
-    homePage.verifyWelcomeText();
+  });
+
+  it('should display the correct heading', () => {
+    homePage.getHeading().should('have.text', 'Welcome to the-internet');
+  });
+
+  it('should display a paragraph with instructions', () => {
+    homePage.getExamplesTitle().should('contain.text', 'Available Examples');
   });
 });
