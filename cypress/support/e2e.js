@@ -15,3 +15,10 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+
+beforeEach(() => {
+    cy.intercept({ method: 'GET', url: /.*optimizely\.com.*/ }, {
+      statusCode: 200,
+      body: {},
+    }).as('optimizely');
+  });
