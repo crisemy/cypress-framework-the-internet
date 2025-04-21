@@ -6,6 +6,14 @@ on:
   pull_request:
     branches: [ main ]
 
+defaults:
+  run:
+    shell: bash
+
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  ACTIONS_STEP_DEBUG: true
+
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
@@ -36,14 +44,14 @@ jobs:
 
       - name: Upload Cypress videos (on failure)
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: cypress-videos
           path: cypress/videos
-      
+
       - name: Upload Cypress screenshots (on failure)
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: cypress-screenshots
-          path: cypress/screenshots    
+          path: cypress/screenshots
