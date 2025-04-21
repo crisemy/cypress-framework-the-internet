@@ -1,12 +1,12 @@
 class LoginPage {
-    // Constructor con los selectores
+    // Selectors constructor
     constructor() {
       this.usernameInput = '#username';
       this.passwordInput = '#password';
       this.loginButton = 'button[type="submit"]';
     }
   
-    // Métodos que usan los selectores definidos en el constructor
+    // Methods for those selectors
     typeUsername(username) {
       cy.get(this.usernameInput).type(username);
     }
@@ -19,7 +19,7 @@ class LoginPage {
       cy.get(this.loginButton).click();
     }
   
-    // Método que encapsula el flujo completo de login
+    // Methods for the login form
     login(username, password) {
       this.typeUsername(username);
       this.typePassword(password);
@@ -28,4 +28,3 @@ class LoginPage {
   }
   
   export default LoginPage;
-  
