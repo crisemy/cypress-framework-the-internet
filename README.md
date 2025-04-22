@@ -91,8 +91,9 @@ describe('Login Tests', () => {
 9. Follow up the rest of the tickets...
 
 ## Continous Integration 
-10. Continuous Integration (CI) Setup
-Pipeline Job (GitHub Actions)
+
+10. ## GitHub Actions
+
 The framework is integrated with GitHub Actions for Continuous Integration (CI). The pipeline job includes the following steps:
 - Checkout the repository: Uses the actions/checkout@v3 to get the latest code.
 - Setup Node.js environment: Uses actions/setup-node@v3 to configure Node.js.
@@ -153,6 +154,90 @@ jobs:
         with:
           name: cypress-screenshots
           path: cypress/screenshots
+
+11. ## Jenkins CI Integration (Alternative to GitHub Actions)
+
+In case you prefer to run your tests via Jenkins (e.g., due to persistent GitHub Actions issues or for professional/local CI control), you can integrate Cypress using a Jenkins pipeline.
+
+- Requirements:
+
+Docker installed (Jenkins will be run inside a container)
+Jenkins plugins:
+  - NodeJS Plugin
+  - Pipeline
+  - Docker Pipeline
+  - HTML Publisher Plugin (to visualize Mochawesome reports)
+
+- Running Jenkins in Docker
+
+You can start Jenkins via Docker with the following command from your terminal (not from Docker CLI):
+
+docker run -d \
+  --name jenkins-cypress \
+  -p 8080:8080 -p 50000:50000 \
+  -v jenkins-data:/var/jenkins_home \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  jenkins/jenkins:lts
+
+Add a Jenkinsfile to the root of your project:
+
+pipeline {
+    agent {
+        docker {
+            image 'cypress/browsers:node-18.12.0-chrome-107-ff-106'
+            args '-u root'
+        }
+    }
+
+    environment {
+        CYPRESS_CACHE_FOLDER = '.cypress_cache'
+        HOME = '/root'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install dependencies') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+
+        stage('Run Cypress Tests') {
+            steps {
+                sh 'npx cypress run --reporter mochawesome'
+            }
+        }
+
+        stage('Publish Report') {
+            steps {
+                publishHTML(target: [
+                    reportDir: 'cypress/reports/mochawesome-report',
+                    reportFiles: 'mochawesome.html',
+                    reportName: 'Mochawesome Report'
+                ])
+            }
+        }
+    }
+}
+
+- Reporter Configuration
+
+In cypress.config.js, make sure Mochawesome is enabled:
+
+reporter: 'mochawesome',
+reporterOptions: {
+  reportDir: 'cypress/reports/mochawesome-report',
+  overwrite: true,
+  html: true,
+  json: false
+}
+
+After each pipeline run, you’ll be able to view the Mochawesome HTML report directly in Jenkins under “Published HTML Reports”.
 
 ##  Conclusion
 This framework is an excellent starting point for automating UI tests with Cypress, offering flexibility and scalability for larger test suites. The integration with Docker allows you to easily set up a consistent test environment, and the CI pipeline ensures that your tests are automatically executed with every change.
