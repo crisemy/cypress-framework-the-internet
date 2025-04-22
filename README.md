@@ -12,6 +12,7 @@ Before starting, ensure you have the following tools installed:
 https://github.com/saucelabs/the-internet.git
 2. Follow up the instructions contained in that repo in order to get a localhost to test against.
 3. If you wouldn't want to download it (in my case the documentation is not clear and didn't want to work with rackup),
+
 get the docker image: 
 a. docker pull gprestes/the-internet
 b. docker run -d -p 7080:5000 gprestes/the-internet
@@ -27,6 +28,7 @@ https://github.com/crisemy/cypress-framework-the-internet.git
 3. npx cypress open -> To generate the environment
 
 4. Generating the structure of the framework
+
 cypress/
 ├── e2e/
 │   └── home.cy.js         # First test
@@ -38,11 +40,13 @@ cypress/
 │   └── e2e.js
 
 5. Adding the .gitignore file containing the following:
+
 node_modules
 .cypress
 .DS_Store
 
 6.  Made the commit: 
+
 git add .
 git commit -m "Initial setup: Node project, Cypress installed, base folder structure"
 git push origin main
