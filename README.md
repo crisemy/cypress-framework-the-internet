@@ -247,3 +247,4 @@ After each pipeline run, you’ll be able to view the Mochawesome HTML report di
 This framework is an excellent starting point for automating UI tests with Cypress, offering flexibility and scalability for larger test suites. The integration with Docker allows you to easily set up a consistent test environment, and the CI pipeline ensures that your tests are automatically executed with every change.
 
 Feel free to fork this repository and contribute if you have suggestions for improvement or new features.
+Thank you!
