@@ -1,62 +1,62 @@
 pipeline {
-  agent any
+    agent any
 
-  environment {
-    NPM_CONFIG_CACHE = "${env.WORKSPACE}/.npm_cache"
-    CYPRESS_CACHE_FOLDER = "${env.WORKSPACE}/.cypress_cache"
-  }
-
-  stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
+    environment {
+        CYPRESS_CACHE_FOLDER = "${WORKSPACE}/.cypress_cache"
+        npm_config_cache = "${WORKSPACE}/.npm_cache"
     }
 
-    stage('Install dependencies') {
-      steps {
-        sh '''
-          mkdir -p $NPM_CONFIG_CACHE
-          mkdir -p $CYPRESS_CACHE_FOLDER
-          npm ci
-        '''
-      }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install dependencies') {
+            steps {
+                sh 'mkdir -p $npm_config_cache'
+                sh 'mkdir -p $CYPRESS_CACHE_FOLDER'
+                sh 'npm ci'
+            }
+        }
+
+        stage('Run Cypress Tests') {
+            agent {
+                docker {
+                    image 'cypress/browsers:node18.12.0-chrome107-ff106'
+                    args '-u root:root'
+                }
+            }
+            steps {
+                sh '''
+                    npx cypress run \
+                      --reporter mochawesome \
+                      --reporter-options reportDir=cypress/reports/mochawesome,overwrite=false,html=false,json=true
+                '''
+            }
+        }
+
+        stage('Publish Report') {
+            steps {
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'cypress/reports/mochawesome',
+                    reportFiles: 'mochawesome.html',
+                    reportName: 'Mochawesome Report'
+                ])
+            }
+        }
     }
 
-    stage('Install Xvfb') {
-      steps {
-        sh '''
-          apt-get update
-          apt-get install -y xvfb
-        '''
-      }
+    post {
+        always {
+            echo "Pipeline completed (success or fail)"
+        }
+        failure {
+            echo "❌ Build FAILED"
+        }
     }
-
-    stage('Run Cypress Tests') {
-      steps {
-        sh '''
-          Xvfb :99 & export DISPLAY=:99
-          npx cypress run --reporter mochawesome --reporter-options reportDir=cypress/reports/mochawesome,overwrite=false,html=false,json=true
-        '''
-      }
-    }
-
-    stage('Publish Report') {
-      steps {
-        archiveArtifacts artifacts: 'cypress/reports/mochawesome/*.json', allowEmptyArchive: true
-      }
-    }
-  }
-
-  post {
-    always {
-      echo 'Pipeline completed (success or fail)'
-    }
-    failure {
-      echo '❌ Build FAILED'
-    }
-    success {
-      echo '✅ Build SUCCESS'
-    }
-  }
 }
