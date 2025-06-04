@@ -15,7 +15,8 @@ https://github.com/saucelabs/the-internet.git
 
 get the docker image: 
 a. docker pull gprestes/the-internet
-b. docker run -d -p 7080:5000 gprestes/the-internet
+b. docker run -d --name the-internet -p 7080:5000 gprestes/the-internet
+
 c. run the app and Access the app via: http://localhost:7080
 
 More information in here -> https://hub.docker.com/r/gprestes/the-internet/
