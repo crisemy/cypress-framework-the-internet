@@ -21,6 +21,8 @@ c. run the app and Access the app via: http://localhost:7080
 
 More information in here -> https://hub.docker.com/r/gprestes/the-internet/
 
+# GIT
+clone the site
 https://github.com/crisemy/cypress-framework-the-internet.git
 
 ## Installing cypress plus dependencies
@@ -177,12 +179,7 @@ Jenkins plugins:
 
 You can start Jenkins via Docker with the following command from your terminal (not from Docker CLI):
 
-docker run -d \
-  --name jenkins-cypress \
-  -p 8080:8080 -p 50000:50000 \
-  -v jenkins-data:/var/jenkins_home \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  jenkins/jenkins:lts
+docker run -d --name jenkins-cypress -p 8080:8080 -p 50000:50000 -v jenkins-data:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock jenkins/jenkins:lts
 
 Add a Jenkinsfile to the root of your project:
 
@@ -242,7 +239,7 @@ reporterOptions: {
   json: false
 }
 
-After each pipeline run, you’ll be able to view the Mochawesome HTML report directly in Jenkins under “Published HTML Reports”.
+After each pipeline runs, you’ll be able to view the Mochawesome HTML report directly in Jenkins under “Published HTML Reports”.
 
 ##  Conclusion
 This framework is an excellent starting point for automating UI tests with Cypress, offering flexibility and scalability for larger test suites. The integration with Docker allows you to easily set up a consistent test environment, and the CI pipeline ensures that your tests are automatically executed with every change.
