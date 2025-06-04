@@ -12,21 +12,35 @@ pipeline {
     }
 
     stages {
+        stage('Inicio') {
+            steps {
+                echo 'Pipeline iniciado correctamente'
+            }
+        }
+
         stage('Checkout') {
             steps {
+                echo 'Haciendo checkout del código...'
                 checkout scm
+                sh 'ls -la'
             }
         }
 
         stage('Install dependencies') {
             steps {
-                sh 'npm ci --unsafe-perm=true'
+                sh 'npm install'
             }
         }
 
         stage('Run Cypress Tests') {
             steps {
                 sh 'npx cypress run --reporter mochawesome'
+            }
+        }
+
+        stage('Post test debug') {
+            steps {
+                sh 'ls -R cypress/reports/mochawesome-report || echo "Reporte no encontrado"'
             }
         }
 
@@ -39,11 +53,6 @@ pipeline {
                 ])
             }
         }
-
-        stage('Clean Workspace') {
-            steps {
-                cleanWs()
-            }
-        }
     }
 }
+
