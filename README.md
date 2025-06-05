@@ -174,6 +174,12 @@ Jenkins plugins:
   - Pipeline
   - Docker Pipeline
   - HTML Publisher Plugin (to visualize Mochawesome reports)
+  - Ngrok
+
+- Ngrok: You'd need to get in order to get a tunnel and gain access to Jenkins in combination with Github
+https://ngrok.com/download
+ngrok http 8080
+use the URL that gets provided and point it to Jenkins in order to run the Job
 
 - Running Jenkins in Docker
 
