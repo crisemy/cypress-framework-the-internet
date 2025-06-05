@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'cypress/browsers:node18.12.0-chrome107-ff106'
+            args '-u root:root'
+        }
+    }
 
     environment {
         CYPRESS_CACHE_FOLDER = "${WORKSPACE}/.cypress_cache"
@@ -22,18 +27,18 @@ pipeline {
         }
 
         stage('Run Cypress Tests') {
-            agent {
-                docker {
-                    image 'cypress/browsers:node18.12.0-chrome107-ff106'
-                    args '-u root:root'
-                }
-            }
             steps {
                 sh '''
                     npx cypress run \
                       --reporter mochawesome \
-                      --reporter-options reportDir=cypress/reports/mochawesome,overwrite=false,html=false,json=true
+                      --reporter-options reportDir=cypress/reports/mochawesome,overwrite=false,html=true,json=true
                 '''
+            }
+        }
+
+        stage('Archive Artifacts') {
+            steps {
+                archiveArtifacts artifacts: 'cypress/reports/mochawesome/*.json', allowEmptyArchive: true
             }
         }
 
