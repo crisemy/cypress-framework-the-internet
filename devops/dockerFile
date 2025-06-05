@@ -2,17 +2,19 @@ FROM jenkins/jenkins:lts
 
 USER root
 
-# Instala dependencias necesarias
+# Instalar dependencias y Docker
 RUN apt-get update && \
-    apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release sudo
-
-# Agrega repositorio oficial de Docker
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
+    apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release sudo && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list && \
     apt-get update && \
-    apt-get install -y docker-ce-cli
+    apt-get install -y docker-ce docker-ce-cli containerd.io && \
+    groupadd docker && \
+    usermod -aG docker jenkins && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Agrega el usuario jenkins al grupo docker
-RUN usermod -aG docker jenkins
+# Permitir que jenkins use sudo sin password (opcional, pero útil)
+RUN echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER jenkins
+
