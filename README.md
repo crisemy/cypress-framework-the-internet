@@ -174,64 +174,11 @@ Jenkins plugins:
   - Pipeline
   - Docker Pipeline
   - HTML Publisher Plugin (to visualize Mochawesome reports)
-  - Ngrok
-
-- Ngrok: You'd need to get in order to get a tunnel and gain access to Jenkins in combination with Github
+  - Ngrok: You'd need to get in order to get a tunnel and gain access to Jenkins in combination with Github
 https://ngrok.com/download
 ngrok http 8080
-use the URL that gets provided and point it to Jenkins in order to run the Job
 
-- Running Jenkins in Docker
-
-You can start Jenkins via Docker with the following command from your terminal (not from Docker CLI):
-
-docker run -d --name jenkins-cypress -p 8080:8080 -p 50000:50000 -v jenkins-data:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock jenkins/jenkins:lts
-
-Add a Jenkinsfile to the root of your project:
-
-pipeline {
-    agent {
-        docker {
-            image 'cypress/browsers:node-18.12.0-chrome-107-ff-106'
-            args '-u root'
-        }
-    }
-
-    environment {
-        CYPRESS_CACHE_FOLDER = '.cypress_cache'
-        HOME = '/root'
-    }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Install dependencies') {
-            steps {
-                sh 'npm ci'
-            }
-        }
-
-        stage('Run Cypress Tests') {
-            steps {
-                sh 'npx cypress run --reporter mochawesome'
-            }
-        }
-
-        stage('Publish Report') {
-            steps {
-                publishHTML(target: [
-                    reportDir: 'cypress/reports/mochawesome-report',
-                    reportFiles: 'mochawesome.html',
-                    reportName: 'Mochawesome Report'
-                ])
-            }
-        }
-    }
-}
+NOTE: Related to Jenkins and the neccesary configuration, it has a proper README.md file. Please refer to that for further instructions
 
 - Reporter Configuration
 
