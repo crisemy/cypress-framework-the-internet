@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins-cypress
+    ports:
+      - "8080:8080"    # Acceso a Jenkins
+      - "50000:50000"  # Agentes remotos (por ahora no lo usarás, pero mejor dejarlo)
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock  # Para que Jenkins pueda usar Docker
+    user: root  # Necesario para acceder al socket de Docker
+
+volumes:
+  jenkins_home:
