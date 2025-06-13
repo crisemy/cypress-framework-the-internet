@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'cypress/browsers:node-18.16.1-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1'
-      args '-u root:root --privileged' // agrega docker.sock si lo necesitás
+      args '-u root:root --privileged'
     }
   }
 
@@ -12,14 +12,6 @@ pipeline {
   }
 
   stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-        sh 'ls -la'
-        sh 'git rev-parse --is-inside-work-tree || echo "⚠️ No es un repo Git"'
-      }
-    }
-
     stage('Install dependencies') {
       steps {
         sh 'mkdir -p "$npm_config_cache"'
