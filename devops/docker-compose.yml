@@ -11,9 +11,22 @@ services:
     volumes:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - ci-net
+    restart: unless-stopped
+
+  the-internet:
+    image: gprestes/the-internet
+    container_name: the-internet
+    ports:
+      - "7080:5000"
+    networks:
+      - ci-net
     restart: unless-stopped
 
 volumes:
   jenkins_home:
 
-
+networks:
+  ci-net:
+    driver: bridge
