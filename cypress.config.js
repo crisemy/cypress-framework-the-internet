@@ -4,6 +4,7 @@ module.exports = defineConfig({
   e2e: {
     baseUrl: process.env.CYPRESS_baseUrl || 'http://localhost:7080', // default for local dev
     // TODO: Add more envs if needed:
+    experimentalStudio: true,
     
     setupNodeEvents(on, config) {
       // implement node event listeners here

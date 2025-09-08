@@ -1,4 +1,6 @@
+### Author: Cris N. (crisemy@gmail.com)
 # My own Cypress Framework
+###
 
 This is a custom-built Cypress automation framework designed to facilitate UI testing. The framework is structured around **Page Object Model** (POM) principles for better scalability and maintainability. It is intended to be used with a sample web application (`the-internet`), which can be tested using Docker or directly from the source repository.
 
@@ -16,7 +18,6 @@ https://github.com/saucelabs/the-internet.git
 get the docker image: 
 a. docker pull gprestes/the-internet
 b. docker run -d --name the-internet -p 7080:5000 gprestes/the-internet
-
 c. run the app and Access the app via: http://localhost:7080
 
 More information in here -> https://hub.docker.com/r/gprestes/the-internet/
@@ -48,7 +49,7 @@ node_modules
 .cypress
 .DS_Store
 
-6.  Made the commit: 
+6.  Make commits: 
 
 git add .
 git commit -m "Initial setup: Node project, Cypress installed, base folder structure"
@@ -195,7 +196,7 @@ reporterOptions: {
 After each pipeline runs, you’ll be able to view the Mochawesome HTML report directly in Jenkins under “Published HTML Reports”.
 
 ##  Conclusion
-This framework is an excellent starting point for automating UI tests with Cypress, offering flexibility and scalability for larger test suites. The integration with Docker allows you to easily set up a consistent test environment, and the CI pipeline ensures that your tests are automatically executed with every change.
+This framework is an good starting point for automating UI tests with Cypress, offering flexibility and scalability for larger test suites. The integration with Docker allows you to easily set up a consistent test environment, and the CI pipeline ensures that your tests are automatically executed with every change.
 
-Feel free to fork this repository and contribute if you have suggestions for improvement or new features.
+Feel free to fork this repository and contribute if you have suggestions for improvements or new features.
 Thank you!
