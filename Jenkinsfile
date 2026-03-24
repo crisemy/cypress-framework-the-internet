@@ -2,8 +2,6 @@ pipeline {
   agent any
 
   environment {
-    CYPRESS_CACHE_FOLDER = "${WORKSPACE}/.cypress_cache"
-    NPM_CACHE_FOLDER = "${WORKSPACE}/.npm_cache"
     BASE_URL = "http://the-internet:5000"
   }
 
@@ -15,9 +13,12 @@ pipeline {
       }
     }
 
-    stage('Start Test App') {
+    stage('Start Test App & Network') {
       steps {
         script {
+          // Create the CI network if it doesn't exist
+          sh 'docker network create ci-net || true'
+          
           def isRunning = sh(
             script: "docker ps -q -f name=the-internet",
             returnStatus: true
@@ -27,10 +28,11 @@ pipeline {
             echo "Starting the-internet container..."
             sh 'docker start the-internet || docker run -d --name the-internet --network ci-net -p 7080:5000 gprestes/the-internet'
           } else {
-            echo "the-internet container already running"
+            echo "the-internet container already running. Ensuring it connects to ci-net..."
+            sh 'docker network connect ci-net the-internet || true'
           }
 
-          // Esperar a que el servicio esté levantado
+          // Wait for the container to start serving
           sh 'sleep 10'
         }
       }
@@ -39,14 +41,14 @@ pipeline {
     stage('Run Tests in Docker') {
       steps {
         script {
-          docker.image('cypress/browsers:node-18.16.1-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1').inside('--user=root:root --privileged') {
+          // Add the "--network ci-net" argument so Cypress can access the-internet via its container name
+          docker.image('cypress/browsers:node-18.16.1-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1').inside('--network ci-net --user=root') {
             withEnv([
-              "CYPRESS_baseUrl=${BASE_URL}",
-              "CYPRESS_CACHE_FOLDER=${CYPRESS_CACHE_FOLDER}",
-              "NPM_CONFIG_CACHE=${NPM_CACHE_FOLDER}"
+              "CYPRESS_baseUrl=${BASE_URL}"
             ]) {
-              sh 'mkdir -p $NPM_CONFIG_CACHE $CYPRESS_CACHE_FOLDER'
               sh 'npm ci'
+              // Wait for the URL to return HTTP 200 before running tests
+              sh 'npx wait-on -t 60000 ${BASE_URL}'
               sh 'npx cypress run --reporter mochawesome --reporter-options reportDir=cypress/reports/mochawesome,overwrite=false,html=true,json=true'
             }
           }
@@ -55,24 +57,8 @@ pipeline {
     }
 
     stage('Archive Artifacts') {
-      when {
-        expression { currentBuild.currentResult == 'SUCCESS' }
-      }
       steps {
         archiveArtifacts artifacts: 'cypress/reports/mochawesome/*.html', allowEmptyArchive: true
-      }
-    }
-
-    stage('Publish Report') {
-      when {
-        expression { currentBuild.currentResult == 'SUCCESS' }
-      }
-      steps {
-        publishHTML(target: [
-          reportDir: 'cypress/reports/mochawesome',
-          reportFiles: 'mochawesome.html',
-          reportName: 'Cypress Mochawesome Report'
-        ])
       }
     }
   }
@@ -80,6 +66,7 @@ pipeline {
   post {
     always {
       echo "✅ Pipeline finalizado (éxito o falla)"
+      cleanWs()
     }
     failure {
       echo "❌ Build FALLÓ"

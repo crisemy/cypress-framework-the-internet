@@ -113,7 +113,7 @@ The framework is integrated with GitHub Actions for Continuous Integration (CI).
 
 Example of the YAML file:
 
-name: Cypress Automation Pipeline
+name: "Cypress Automation Pipeline"
 
 on:
   push:
@@ -124,48 +124,35 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Pull Docker image of the app
-        run: docker pull gprestes/the-internet
+        uses: actions/checkout@v4
 
       - name: Start the app container
         run: docker run -d -p 7080:5000 gprestes/the-internet
 
-      - name: Wait for the app to be ready
-        run: npx wait-on http://localhost:7080
-
       - name: Run Cypress tests
-        run: npx cypress run
-
-      - name: Upload Cypress videos (on failure)
-        if: failure()
-        uses: actions/upload-artifact@v2
+        uses: cypress-io/github-action@v6
         with:
-          name: cypress-videos
-          path: cypress/videos
+          wait-on: 'http://localhost:7080'
+          wait-on-timeout: 120
+          publish-summary: true
+        env:
+          CYPRESS_baseUrl: 'http://localhost:7080'
 
-      - name: Upload Cypress screenshots (on failure)
-        if: failure()
-        uses: actions/upload-artifact@v2
+      - name: Upload Cypress artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: cypress-screenshots
-          path: cypress/screenshots
+          name: cypress-artifacts
+          path: |
+            cypress/videos/
+            cypress/screenshots/
+            cypress/reports/
 
 11. ## Jenkins CI Integration (Alternative to GitHub Actions)
 
-In case you prefer to run your tests via Jenkins (e.g., due to persistent GitHub Actions issues or for professional/local CI control), you can integrate Cypress using a Jenkins pipeline.
+In case you prefer to run your tests via Jenkins (e.g., due to persistent GitHub Actions issues or for professional/local CI control), you can integrate Cypress using a Jenkins pipeline. The logic creates a Docker network named `ci-net` so the app container and test runner container can safely communicate.
 
 - Requirements:
 

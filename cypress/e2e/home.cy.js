@@ -17,7 +17,7 @@ describe('Home Page', () => {
 });
 
 it('studioTest', function() {
-  cy.visit('http://localhost:7080/')
+  cy.visit('/')
   cy.get('.heading').should('have.text', 'Welcome to the-internet');
   cy.get('h2').should('have.text', 'Available Examples');
   cy.get('img').should('be.visible');
