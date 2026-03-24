@@ -24,7 +24,7 @@ More information in here -> https://hub.docker.com/r/gprestes/the-internet/
 
 # GIT
 clone the site
-https://github.com/crisemy/cypress-framework-the-internet.git
+https://github.com/crisemy/cypress-automation-core.git
 
 ## Installing cypress plus dependencies
 1. npm init -y -> Will generate a package.json file to start doing your configuration
@@ -94,7 +94,7 @@ describe('Login Tests', () => {
   });
 });
 
-8. Follow up the first ticket: https://github.com/crisemy/cypress-framework-the-internet/issues/1
+8. Follow up the first ticket: https://github.com/crisemy/cypress-automation-core/issues/1
 
 9. Follow up the rest of the tickets...
 
